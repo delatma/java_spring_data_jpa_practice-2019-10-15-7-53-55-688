@@ -3,9 +3,11 @@ package com.tw.apistackbase.controller;
 import com.tw.apistackbase.core.Company;
 import com.tw.apistackbase.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/companies")
@@ -27,5 +29,23 @@ public class CompanyController {
 //
 //        companyRepository.save(company); modifies company to set a value for ID
 //        according to @GeneratedValue
+    }
+
+    @PatchMapping(produces = {"application/json"})
+    public ResponseEntity<String> updateCompany(@RequestBody Company company) {
+        Optional<Company> optionalCompany = companyRepository.findById(company.getId());
+
+        if (optionalCompany.isPresent()) {
+            Company existingCompany = optionalCompany.get();
+            existingCompany.setName(company.getName());
+            existingCompany.setEmployees(company.getEmployees());
+            existingCompany.setProfile(company.getProfile());
+
+            companyRepository.save(existingCompany);
+
+            return ResponseEntity.ok("Updated company " + existingCompany.getId());
+        } else {
+            return ResponseEntity.badRequest().body("Company does not exist for ID " + company.getId());
+        }
     }
 }
