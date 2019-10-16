@@ -6,18 +6,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Company {
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+    private long id;
     private String name;
+    private int age;
 
-    public Long getId() {
+    public Employee() {
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -29,10 +32,11 @@ public class Company {
         this.name = name;
     }
 
-    public Company() {
+    public int getAge() {
+        return age;
     }
 
-    public Company(String name) {
-        this.name = name;
+    public void setAge(int age) {
+        this.age = age;
     }
 }
