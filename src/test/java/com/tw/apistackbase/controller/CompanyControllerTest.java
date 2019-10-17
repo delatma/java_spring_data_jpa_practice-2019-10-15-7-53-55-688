@@ -106,7 +106,7 @@ class CompanyControllerTest {
     }
 
     @Test
-    public void should_not_delete_if_no_existing_company() throws Exception {
+    public void should_return_400_if_no_existing_company_on_delete() throws Exception {
 //        given
         Company cCompany = new Company("cCompany");
         cCompany.setId(1L);
@@ -129,6 +129,22 @@ class CompanyControllerTest {
         ResultActions result = mvc.perform(patch("/companies/{id}", 1L));
 //        then
         result.andExpect(status().isOk());
+    }
+
+    @Test
+    public void should_return_400_if_no_existing_company_on_update() throws Exception {
+//        given
+        Company cCompany = new Company("cCompany");
+        cCompany.setId(1L);
+        when(companyService.save(eq(cCompany))).thenReturn(cCompany);
+//        when
+        ResultActions result = mvc.perform(patch("/companies/{id}", 2L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cCompany)));
+//        then
+        result.andExpect(status().isBadRequest())
+                .andDo(print())
+                .andExpect(jsonPath("$.id").doesNotExist());
     }
 
 
