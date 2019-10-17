@@ -2,22 +2,10 @@ package com.tw.apistackbase.controller;
 
 import com.tw.apistackbase.core.Company;
 import com.tw.apistackbase.repositories.CompanyRepository;
-<<<<<<< HEAD
-<<<<<<< HEAD
-import org.hibernate.annotations.Parameter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-=======
-=======
->>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
 import org.apache.coyote.Response;
 import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-<<<<<<< HEAD
->>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
-=======
->>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,15 +36,7 @@ public class CompanyController {
 
     @PatchMapping(produces = {"application/json"})
     public ResponseEntity<String> updateCompany(@RequestBody Company company) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        Optional<Company> optionalCompany = companyRepository.findById(company.getId());
-=======
         Optional<Company> optionalCompany = companyRepository.findByName(company.getName());
->>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
-=======
-        Optional<Company> optionalCompany = companyRepository.findByName(company.getName());
->>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
 
         if (optionalCompany.isPresent()) {
             Company existingCompany = optionalCompany.get();
@@ -66,21 +46,9 @@ public class CompanyController {
 
             companyRepository.save(existingCompany);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-            return ResponseEntity.ok("Updated company " + existingCompany.getId());
-        } else {
-            return ResponseEntity.badRequest().body("Company does not exist for ID " + company.getId());
-=======
             return new ResponseEntity<>("Updated company " + existingCompany.getName(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Company " + company.getName()+ " does not exist", HttpStatus.BAD_REQUEST);
->>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
-=======
-            return new ResponseEntity<>("Updated company " + existingCompany.getName(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Company " + company.getName()+ " does not exist", HttpStatus.BAD_REQUEST);
->>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
         }
     }
 
@@ -91,22 +59,10 @@ public class CompanyController {
         if (optionalCompany.isPresent()) {
             Company existingCompany = optionalCompany.get();
             companyRepository.delete(existingCompany);
-<<<<<<< HEAD
-<<<<<<< HEAD
-            return ResponseEntity.ok("Deleted company " + id);
-        } else {
-            return ResponseEntity.badRequest().body("Company does not exist for ID " + id);
-=======
-=======
->>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
 
             return new ResponseEntity<>("Deleted company " + id, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Company does not exist for ID " + id, HttpStatus.BAD_REQUEST);
-<<<<<<< HEAD
->>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
-=======
->>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
         }
     }
 }
