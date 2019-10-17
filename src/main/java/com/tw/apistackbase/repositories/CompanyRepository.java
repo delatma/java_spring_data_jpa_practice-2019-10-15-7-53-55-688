@@ -2,12 +2,15 @@ package com.tw.apistackbase.repositories;
 
 import com.tw.apistackbase.core.Company;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 =======
+=======
+>>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
 import org.hibernate.query.criteria.internal.compile.CriteriaQueryTypeQueryAdapter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,5 +23,8 @@ import java.util.Optional;
 public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("Select c from Company c where c.name = :name")
     Optional<Company> findByName(@Param("name") String name);
+<<<<<<< HEAD
+>>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
+=======
 >>>>>>> b1735056ce6713ae4c13a6d141f8535d2549b767
 }
