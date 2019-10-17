@@ -121,4 +121,15 @@ class CompanyControllerTest {
                 .andExpect(jsonPath("$.id").doesNotExist());
     }
 
+    @Test
+    public void should_update_an_existing_company() throws Exception {
+//        given
+        when(companyService.findById(1L)).thenReturn(Optional.of(new Company()));
+//        when
+        ResultActions result = mvc.perform(patch("/companies/{id}", 1L));
+//        then
+        result.andExpect(status().isOk());
+    }
+
+
 }
