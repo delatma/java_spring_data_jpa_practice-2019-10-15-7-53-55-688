@@ -17,10 +17,6 @@ public class CompanyService {
         this.companyRepository = companyRepository;
     }
 
-    public Iterable<Company> findAll() {
-        return companyRepository.findAll();
-    }
-
     public Iterable<Company> findSpecificCompanies(PageRequest pageRequest) {
         return companyRepository.findAll(pageRequest);
     }

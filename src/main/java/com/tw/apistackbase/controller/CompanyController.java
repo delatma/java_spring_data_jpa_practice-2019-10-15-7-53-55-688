@@ -14,19 +14,12 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
-//    @Autowired
-//    private CompanyRepository companyRepository;
-
     @Autowired
     private CompanyService companyService;
 
     @GetMapping(value = "/all", produces = {"application/json"})
     public Iterable<Company> listMultipleCompanies(@RequestParam(defaultValue = "0") Integer page,
                                                    @RequestParam(defaultValue = "5") Integer pageSize) {
-        if(page == null || pageSize==null){
-            return companyService.findAll();
-        }
-
         Sort.Order orderByName = new Sort.Order(Sort.Direction.ASC, "name").ignoreCase();
         return companyService.findSpecificCompanies(PageRequest.of(page, pageSize, Sort.by(orderByName)));
     }
