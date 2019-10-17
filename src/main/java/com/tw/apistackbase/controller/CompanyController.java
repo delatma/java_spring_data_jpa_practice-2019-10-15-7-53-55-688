@@ -2,14 +2,13 @@ package com.tw.apistackbase.controller;
 
 import com.tw.apistackbase.core.Company;
 import com.tw.apistackbase.repositories.CompanyRepository;
-import org.apache.coyote.Response;
-import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,8 +18,14 @@ public class CompanyController {
     private CompanyRepository companyRepository;
 
     @GetMapping(value = "/all", produces = {"application/json"})
-    public Iterable<Company> list() {
-        return companyRepository.findAll();
+    public Iterable<Company> list(@RequestParam(required = false) Integer page,
+                                  @RequestParam(required = false) Integer pageSize) {
+        if(page == null || pageSize==null){
+            return companyRepository.findAll();
+        }
+
+        Sort.Order orderByName = new Sort.Order(Sort.Direction.ASC, "name").ignoreCase();
+        return companyRepository.findAll(PageRequest.of(page, pageSize, Sort.by(orderByName)));
     }
 
     @GetMapping(produces = {"application/json"})
