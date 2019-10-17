@@ -1,7 +1,7 @@
 package com.tw.apistackbase.controller;
 
 import com.tw.apistackbase.core.Company;
-import com.tw.apistackbase.repositories.CompanyRepository;
+import com.tw.apistackbase.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,18 +14,21 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
+//    @Autowired
+//    private CompanyRepository companyRepository;
+
     @Autowired
-    private CompanyRepository companyRepository;
+    private CompanyService companyService;
 
     @GetMapping(value = "/all", produces = {"application/json"})
-    public Iterable<Company> list(@RequestParam(defaultValue = "0") Integer page,
-                                  @RequestParam(defaultValue = "5") Integer pageSize) {
+    public Iterable<Company> listMultipleCompanies(@RequestParam(defaultValue = "0") Integer page,
+                                                   @RequestParam(defaultValue = "5") Integer pageSize) {
         if(page == null || pageSize==null){
-            return companyRepository.findAll();
+            return companyService.findAll();
         }
 
         Sort.Order orderByName = new Sort.Order(Sort.Direction.ASC, "name").ignoreCase();
-        return companyRepository.findAll(PageRequest.of(page, pageSize, Sort.by(orderByName)));
+        return companyService.findSpecificCompanies(PageRequest.of(page, pageSize, Sort.by(orderByName)));
     }
 
     @GetMapping(produces = {"application/json"})
@@ -33,14 +36,14 @@ public class CompanyController {
         if (name == null) {
             return null;
         }
-        Optional<Company> company = companyRepository.findByNameContaining(name);
+        Optional<Company> company = companyService.findByNameContaining(name);
 
         return company.orElse(null);
     }
 
     @PostMapping(produces = {"application/json"})
     public Company add(@RequestBody Company company) {
-        return companyRepository.save(company);
+        return companyService.save(company);
 
 //        We don't say companyRepository.save(company); return
 //        Since the returned company does not have a value for ID
@@ -51,7 +54,7 @@ public class CompanyController {
 
     @PatchMapping(produces = {"application/json"})
     public ResponseEntity<String> updateCompany(@RequestBody Company company) {
-        Optional<Company> optionalCompany = companyRepository.findByName(company.getName());
+        Optional<Company> optionalCompany = companyService.findByName(company.getName());
 
         if (optionalCompany.isPresent()) {
             Company existingCompany = optionalCompany.get();
@@ -59,7 +62,7 @@ public class CompanyController {
             existingCompany.setEmployees(company.getEmployees());
             existingCompany.setProfile(company.getProfile());
 
-            companyRepository.save(existingCompany);
+            companyService.save(existingCompany);
 
             return new ResponseEntity<>("Updated company " + existingCompany.getName(), HttpStatus.OK);
         } else {
@@ -70,10 +73,10 @@ public class CompanyController {
     @DeleteMapping(produces = {"application/json"})
     @RequestMapping("/{id}")
     public ResponseEntity<String> deleteCompany(@PathVariable long id) {
-        Optional<Company> optionalCompany = companyRepository.findById(id);
+        Optional<Company> optionalCompany = companyService.findById(id);
         if (optionalCompany.isPresent()) {
             Company existingCompany = optionalCompany.get();
-            companyRepository.delete(existingCompany);
+            companyService.delete(existingCompany);
 
             return new ResponseEntity<>("Deleted company " + id, HttpStatus.OK);
         } else {
