@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +27,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -84,8 +84,8 @@ class CompanyControllerTest {
 
         //when
         ResultActions result = mvc.perform(post("/companies")
-                .content(objectMapper.writeValueAsString(cCompany))
                 .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cCompany))
         );
 
         //then
@@ -95,4 +95,12 @@ class CompanyControllerTest {
                 .andExpect(jsonPath("$.name", is("cCompany")));
     }
 
+    @Test
+    public void should_delete_an_existing_company() throws Exception {
+//        given
+        when(companyService.findById(1)).thenReturn(Optional.of(new Company()));
+//        when
+        ResultActions result = mvc.perform(delete("/companies/1"));
+//        then
+    }
 }
