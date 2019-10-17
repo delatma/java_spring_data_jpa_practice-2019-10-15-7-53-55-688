@@ -98,9 +98,10 @@ class CompanyControllerTest {
     @Test
     public void should_delete_an_existing_company() throws Exception {
 //        given
-        when(companyService.findById(1)).thenReturn(Optional.of(new Company()));
+        when(companyService.findById(1L)).thenReturn(Optional.of(new Company()));
 //        when
-        ResultActions result = mvc.perform(delete("/companies/1"));
+        ResultActions result = mvc.perform(delete("/companies/{id}",1L));
 //        then
+        result.andExpect(status().isOk());
     }
 }
