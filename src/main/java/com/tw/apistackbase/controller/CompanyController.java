@@ -18,8 +18,8 @@ public class CompanyController {
     private CompanyRepository companyRepository;
 
     @GetMapping(value = "/all", produces = {"application/json"})
-    public Iterable<Company> list(@RequestParam(required = false) Integer page,
-                                  @RequestParam(required = false) Integer pageSize) {
+    public Iterable<Company> list(@RequestParam(defaultValue = "0") Integer page,
+                                  @RequestParam(defaultValue = "5") Integer pageSize) {
         if(page == null || pageSize==null){
             return companyRepository.findAll();
         }
