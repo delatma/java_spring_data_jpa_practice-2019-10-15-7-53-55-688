@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("Select c from Company c where c.name = :name")
     Optional<Company> findByName(@Param("name") String name);
+
+    Optional<Company> findByNameContaining(String name);
 }

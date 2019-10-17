@@ -18,9 +18,19 @@ public class CompanyController {
     @Autowired
     private CompanyRepository companyRepository;
 
-    @GetMapping(produces = {"application/json"})
+    @GetMapping(value = "/all", produces = {"application/json"})
     public Iterable<Company> list() {
         return companyRepository.findAll();
+    }
+
+    @GetMapping(produces = {"application/json"})
+    public Company findCompany(@RequestParam(required = false) String name){
+        if (name == null) {
+            return null;
+        }
+        Optional<Company> company = companyRepository.findByNameContaining(name);
+
+        return company.orElse(null);
     }
 
     @PostMapping(produces = {"application/json"})
