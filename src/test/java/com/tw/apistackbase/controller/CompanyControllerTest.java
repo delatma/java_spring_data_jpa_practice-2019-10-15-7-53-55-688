@@ -52,7 +52,7 @@ class CompanyControllerTest {
     private Company existingCompany;
 
     @Test
-    public void should_find_company_by_name() throws Exception{
+    public void should_find_company_by_name() throws Exception {
         //given
         Company acompany = new Company("acompany");
         when(companyService.findByNameContaining("a")).thenReturn(Optional.of(acompany));
@@ -65,7 +65,7 @@ class CompanyControllerTest {
     }
 
     @Test
-    public void should_return_null_when_criteria_does_not_match() throws Exception{
+    public void should_return_null_when_criteria_does_not_match() throws Exception {
         //given
         //when
         ResultActions result = mvc.perform(get("/companies?name=ccompany"));
@@ -76,7 +76,7 @@ class CompanyControllerTest {
     }
 
     @Test
-    public void should_be_able_to_add_new_company() throws Exception{
+    public void should_be_able_to_add_new_company() throws Exception {
         //given
         Company cCompany = new Company("cCompany");
         cCompany.setId(1L);
@@ -100,8 +100,25 @@ class CompanyControllerTest {
 //        given
         when(companyService.findById(1L)).thenReturn(Optional.of(new Company()));
 //        when
-        ResultActions result = mvc.perform(delete("/companies/{id}",1L));
+        ResultActions result = mvc.perform(delete("/companies/{id}", 1L));
 //        then
         result.andExpect(status().isOk());
     }
+
+    @Test
+    public void should_not_delete_if_no_existing_company() throws Exception {
+//        given
+        Company cCompany = new Company("cCompany");
+        cCompany.setId(1L);
+        when(companyService.save(eq(cCompany))).thenReturn(cCompany);
+//        when
+        ResultActions result = mvc.perform(delete("/companies/{id}", 2L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cCompany)));
+//        then
+        result.andExpect(status().isBadRequest())
+                .andDo(print())
+                .andExpect(jsonPath("$.id").doesNotExist());
+    }
+
 }
