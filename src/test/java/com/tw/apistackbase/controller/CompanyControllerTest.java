@@ -3,7 +3,6 @@ package com.tw.apistackbase.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tw.apistackbase.core.Company;
 import com.tw.apistackbase.services.CompanyService;
-import org.junit.experimental.results.ResultMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +13,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 
-import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
-
-import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

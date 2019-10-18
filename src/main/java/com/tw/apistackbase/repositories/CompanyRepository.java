@@ -1,7 +1,6 @@
 package com.tw.apistackbase.repositories;
 
 import com.tw.apistackbase.core.Company;
-import org.hibernate.query.criteria.internal.compile.CriteriaQueryTypeQueryAdapter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
