@@ -52,7 +52,7 @@ class CompanyControllerTest {
     private Company existingCompany;
 
     @Test
-    public void should_find_company_by_name() throws Exception {
+    public void should_be_able_to_find_company_by_name() throws Exception {
         //given
         Company acompany = new Company("acompany");
         when(companyService.findByNameContaining("a")).thenReturn(Optional.of(acompany));
@@ -65,7 +65,7 @@ class CompanyControllerTest {
     }
 
     @Test
-    public void should_return_null_when_criteria_does_not_match() throws Exception {
+    public void should_return_null_when_company_name_does_not_exist_on_search() throws Exception {
         //given
         //when
         ResultActions result = mvc.perform(get("/companies?name=ccompany"));
@@ -96,7 +96,7 @@ class CompanyControllerTest {
     }
 
     @Test
-    public void should_delete_an_existing_company() throws Exception {
+    public void should_be_able_to_delete_an_existing_company() throws Exception {
 //        given
         when(companyService.findById(1L)).thenReturn(Optional.of(new Company()));
 //        when
@@ -122,11 +122,16 @@ class CompanyControllerTest {
     }
 
     @Test
-    public void should_update_an_existing_company() throws Exception {
+    public void should_be_able_to_update_an_existing_company() throws Exception {
 //        given
-        when(companyService.findById(1L)).thenReturn(Optional.of(new Company()));
+        Company cCompany = new Company("cCompany");
+        cCompany.setId(1L);
+        when(companyService.findByName("cCompany")).thenReturn(Optional.of(cCompany));
+        when(companyService.save(eq(cCompany))).thenReturn(cCompany);
 //        when
-        ResultActions result = mvc.perform(patch("/companies/{id}", 1L));
+        ResultActions result = mvc.perform(patch("/companies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cCompany)));
 //        then
         result.andExpect(status().isOk());
     }
@@ -136,16 +141,14 @@ class CompanyControllerTest {
 //        given
         Company cCompany = new Company("cCompany");
         cCompany.setId(1L);
+        when(companyService.findByName("dCompany")).thenReturn(Optional.of(cCompany));
         when(companyService.save(eq(cCompany))).thenReturn(cCompany);
 //        when
-        ResultActions result = mvc.perform(patch("/companies/{id}", 2L)
+        ResultActions result = mvc.perform(patch("/companies")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cCompany)));
 //        then
-        result.andExpect(status().isBadRequest())
-                .andDo(print())
-                .andExpect(jsonPath("$.id").doesNotExist());
+        result.andExpect(status().isBadRequest());
     }
-
 
 }
