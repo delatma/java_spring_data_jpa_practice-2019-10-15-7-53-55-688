@@ -99,13 +99,13 @@ class CompanyControllerTest {
     }
 
     @Test
-    public void should_return_400_if_no_existing_company_on_delete() throws Exception {
+    public void should_return_404_if_no_existing_company_on_delete() throws Exception {
 //        given
         when(companyService.delete(1)).thenReturn(false);
 //        when
         ResultActions result = mvc.perform(delete("/companies/{id}", 1));
 //        then
-        result.andExpect(status().isBadRequest())
+        result.andExpect(status().isNotFound())
                 .andDo(print())
                 .andExpect(jsonPath("$", is("Company does not exist for ID 1")));
     }

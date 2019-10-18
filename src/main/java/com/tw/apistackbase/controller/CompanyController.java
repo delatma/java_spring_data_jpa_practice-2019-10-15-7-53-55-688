@@ -2,12 +2,14 @@ package com.tw.apistackbase.controller;
 
 import com.tw.apistackbase.core.Company;
 import com.tw.apistackbase.services.CompanyService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Optional;
 
@@ -59,18 +61,22 @@ public class CompanyController {
 
             return new ResponseEntity<>("Updated company " + existingCompany.getName(), HttpStatus.OK);
         } else {
+
             return new ResponseEntity<>("Company " + company.getName()+ " does not exist", HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping(produces = {"application/json"})
     @RequestMapping("/{id}")
-    public ResponseEntity<String> deleteCompany(@PathVariable int id) {
-        boolean wasDeleted = companyService.delete(id);
-
-        if(wasDeleted){
-            return new ResponseEntity<>("Deleted company " + id, HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Company does not exist for ID " + id, HttpStatus.BAD_REQUEST);
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void deleteCompany(@PathVariable int id) throws NotFoundException {
+        companyService.delete(id);
+        throw new NotFoundException("Not found");
+//        boolean wasDeleted = companyService.delete(id);
+//
+//        if(wasDeleted){
+//            return new ResponseEntity<>("Deleted company " + id, HttpStatus.OK);
+//        }
+//        throw new NotFoundException("Company does not exist for ID " + id);
     }
 }
