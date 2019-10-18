@@ -125,7 +125,6 @@ class CompanyControllerTest {
     public void should_be_able_to_update_an_existing_company() throws Exception {
 //        given
         Company cCompany = new Company("cCompany");
-        cCompany.setId(1L);
         when(companyService.findByName("cCompany")).thenReturn(Optional.of(cCompany));
         when(companyService.save(eq(cCompany))).thenReturn(cCompany);
 //        when
@@ -140,7 +139,6 @@ class CompanyControllerTest {
     public void should_return_400_if_no_existing_company_on_update() throws Exception {
 //        given
         Company cCompany = new Company("cCompany");
-        cCompany.setId(1L);
         when(companyService.findByName("dCompany")).thenReturn(Optional.of(cCompany));
         when(companyService.save(eq(cCompany))).thenReturn(cCompany);
 //        when
