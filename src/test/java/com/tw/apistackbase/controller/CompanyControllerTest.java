@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CompanyController.class)
 @ActiveProfiles(profiles = "test")
 class CompanyControllerTest {
-
     @Autowired
     private CompanyController companyController;
 
@@ -90,27 +89,25 @@ class CompanyControllerTest {
     @Test
     public void should_be_able_to_delete_an_existing_company() throws Exception {
 //        given
-        when(companyService.findById(1L)).thenReturn(Optional.of(new Company()));
+        when(companyService.delete(1)).thenReturn(true);
 //        when
-        ResultActions result = mvc.perform(delete("/companies/{id}", 1L));
+        ResultActions result = mvc.perform(delete("/companies/{id}", 1));
 //        then
-        result.andExpect(status().isOk());
+        result.andExpect(status().isOk())
+            .andDo(print())
+            .andExpect(jsonPath("$", is("Deleted company 1")));
     }
 
     @Test
     public void should_return_400_if_no_existing_company_on_delete() throws Exception {
 //        given
-        Company cCompany = new Company("cCompany");
-        cCompany.setId(1L);
-        when(companyService.save(eq(cCompany))).thenReturn(cCompany);
+        when(companyService.delete(1)).thenReturn(false);
 //        when
-        ResultActions result = mvc.perform(delete("/companies/{id}", 2L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(cCompany)));
+        ResultActions result = mvc.perform(delete("/companies/{id}", 1));
 //        then
         result.andExpect(status().isBadRequest())
                 .andDo(print())
-                .andExpect(jsonPath("$.id").doesNotExist());
+                .andExpect(jsonPath("$", is("Company does not exist for ID 1")));
     }
 
     @Test

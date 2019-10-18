@@ -4,6 +4,8 @@ import com.tw.apistackbase.core.Company;
 import com.tw.apistackbase.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -37,7 +39,14 @@ public class CompanyService {
         return companyRepository.findById(id);
     }
 
-    public void delete(Company existingCompany) {
-        companyRepository.delete(existingCompany);
+    public boolean delete(int id) {
+        Optional<Company> optionalCompany = findById(id);
+        if (optionalCompany.isPresent()) {
+            Company existingCompany = optionalCompany.get();
+            companyRepository.delete(existingCompany);
+
+            return true;
+        }
+        return false;
     }
 }

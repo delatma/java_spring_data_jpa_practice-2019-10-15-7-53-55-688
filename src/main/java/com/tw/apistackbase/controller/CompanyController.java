@@ -65,15 +65,12 @@ public class CompanyController {
 
     @DeleteMapping(produces = {"application/json"})
     @RequestMapping("/{id}")
-    public ResponseEntity<String> deleteCompany(@PathVariable long id) {
-        Optional<Company> optionalCompany = companyService.findById(id);
-        if (optionalCompany.isPresent()) {
-            Company existingCompany = optionalCompany.get();
-            companyService.delete(existingCompany);
+    public ResponseEntity<String> deleteCompany(@PathVariable int id) {
+        boolean wasDeleted = companyService.delete(id);
 
+        if(wasDeleted){
             return new ResponseEntity<>("Deleted company " + id, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Company does not exist for ID " + id, HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>("Company does not exist for ID " + id, HttpStatus.BAD_REQUEST);
     }
 }
